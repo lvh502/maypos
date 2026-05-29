@@ -1,4 +1,4 @@
-# Starbucks POS — Hệ thống bán hàng
+# Starbucks POS - Hệ thống bán hàng
 
 Ứng dụng Point-of-Sale (POS) mô phỏng hệ thống bán hàng Starbucks, được xây dựng bằng HTML, CSS và JavaScript thuần (vanilla) — không phụ thuộc vào bất kỳ framework hay thư viện ngoài nào.
 
