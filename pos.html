@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Starbucks POS - Hệ thống bán hàng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="pos.css" />
+  </head>
+  <body>
+</head>
+  <body>
+    <!-- ══════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════ -->
+    <div id="loginScreen">
+      <div class="lb1"></div>
+      <div class="lb2"></div>
+      <div class="lb3"></div>
+      <div class="lb4"></div>
+      <div class="login-wrap">
+        <div class="login-left">
+          <div class="ll-brand">
+            <div class="ll-logo">
+  <img src="images/starbucks-logo.png" alt="Starbucks Logo" width="42" height="42">
+</div>
+            <div>
+              <div class="ll-brand-name">Starbucks</div>
+              <div class="ll-brand-sub">POS · Học viện Ngân hàng</div>
+            </div>
+          </div>
+          <div class="ll-sec">Chọn nhân viên</div>
+          <div class="emp-grid" id="empGrid">
+            <div class="emp-card sel" onclick="selEmpFn(this, 0)">
+              <div class="emp-ava">
+  <img src="images/viet-hoang.jpg" width="48" height="48" style="border-radius: 50%; object-fit: cover;">
+</div>
+              <div class="emp-name">Việt Hoàng</div>
+              <div class="emp-role">Quản lý ca</div>
+            </div>
+            <div class="emp-card" onclick="selEmpFn(this, 1)">
+              <div class="emp-ava">
+  <img src="images/vi-nam.jpg" width="48" height="48" style="border-radius: 50%; object-fit: cover;">
+</div>
+              <div class="emp-name">Vi Nam</div>
+              <div class="emp-role">Thu ngân</div>
+            </div>
+            <div class="emp-card" onclick="selEmpFn(this, 2)">
+              <div class="emp-ava">
+  <img src="images/son-tung.jpg" width="48" height="48" style="border-radius: 50%; object-fit: cover;">
+</div>
+              <div class="emp-name">Sơn Tùng</div>
+              <div class="emp-role">Thu ngân</div>
+            </div>
+            <div class="emp-card" onclick="selEmpFn(this, 3)">
+              <div class="emp-ava">
+  <img src="images/duy-long.jpg" width="48" height="48" style="border-radius: 50%; object-fit: cover;">
+</div>
+              <div class="emp-name">Duy Long</div>
+              <div class="emp-role">Barista</div>
+            </div>
+          </div>
+          <div class="ll-sec">Ca làm việc</div>
+          <div class="shift-row" id="shiftGrid">
+            <div class="shift-btn sel" onclick="selShiftFn(this, 'Sáng')">
+              <b>☀️ Sáng</b><small>06:00–14:00</small>
+            </div>
+            <div class="shift-btn" onclick="selShiftFn(this, 'Chiều')">
+              <b>🌤 Chiều</b><small>14:00–22:00</small>
+            </div>
+            <div class="shift-btn" onclick="selShiftFn(this, 'Tối')">
+              <b>🌙 Tối</b><small>18:00–23:00</small>
+            </div>
+          </div>
+          
+        </div>
+        <div class="login-right">
+          <div class="lr-title">
+            Xin chào, <span id="empGreet">Việt Hoàng</span> 👋
+          </div>
+          <p class="lr-sub">Nhập mã PIN 4 chữ số để bắt đầu ca làm việc</p>
+          <div class="pin-dots" id="pinDots">
+            <div class="pd" id="pd0"></div>
+            <div class="pd" id="pd1"></div>
+            <div class="pd" id="pd2"></div>
+            <div class="pd" id="pd3"></div>
+          </div>
+          <div class="pin-pad">
+            <div class="pp" onclick="pinKey('1')">1</div>
+            <div class="pp" onclick="pinKey('2')">2</div>
+            <div class="pp" onclick="pinKey('3')">3</div>
+            <div class="pp" onclick="pinKey('4')">4</div>
+            <div class="pp" onclick="pinKey('5')">5</div>
+            <div class="pp" onclick="pinKey('6')">6</div>
+            <div class="pp" onclick="pinKey('7')">7</div>
+            <div class="pp" onclick="pinKey('8')">8</div>
+            <div class="pp" onclick="pinKey('9')">9</div>
+            <div class="pp empty"></div>
+            <div class="pp" onclick="pinKey('0')">0</div>
+            <div class="pp del" onclick="pinDel()">⌫</div>
+          </div>
+          <button class="btn-login" id="btnLogin" onclick="doLogin()" disabled>
+            Bắt đầu ca làm →
+          </button>
+          <div class="login-err" id="loginErr"></div>
+          <p class="login-hint">
+            💡 PIN: Việt Hoàng <b>0509</b> · Vi Nam <b>2607</b> · Sơn Tùng <b>1205</b> · Duy Long <b>1912</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════ -->
+    <div id="mainApp">
+      <nav>
+        <div class="nav-l">
+          <div class="nav-logo">
+  <img src="images/starbucks-logo.png" alt="Starbucks Logo" width="28" height="28">
+</div>
+          <span class="nav-title">Starbucks POS</span>
+        </div>
+        <div class="nav-r">
+          <button
+            class="btn-nav active"
+            id="navPOS"
+            onclick="switchView('pos')"
+          >
+            🧾 Bán hàng
+          </button>
+          <button class="btn-nav" id="navKDS" onclick="switchView('kds')">
+            📺 KDS Bếp
+          </button>
+          <button class="btn-nav" id="navInv" onclick="switchView('inv')">
+            📦 Tồn kho
+          </button>
+          <button class="btn-nav" id="navRep" onclick="switchView('rep')">
+            📊 Báo cáo
+          </button>
+          <span class="ntag shift" id="navShift">Ca sáng · Học viện Ngân hàng</span>
+          <span id="clock"></span>
+          <span class="ntag emp" id="navEmp">Thu ngân: Việt Hoàng</span>
+          <button class="btn-nav" onclick="doLogout()">⏏ Kết ca</button>
+        </div>
+      </nav>
+
+      <!-- POS VIEW -->
+      <div class="view active" id="posView">
+        <div class="workspace">
+          <div class="menu-panel">
+            <div class="menu-search">
+              <div class="search-box">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  id="srch"
+                  placeholder="Tìm sản phẩm…"
+                  oninput="renderMenu()"
+                />
+              </div>
+            </div>
+            <div class="cat-row" id="catRow"></div>
+            <div class="prod-grid" id="prodGrid"></div>
+          </div>
+
+          <div class="order-panel">
+            <div class="ord-hd">
+              <div class="ord-hd-row">
+                <span class="ord-hd-title">Đơn hàng</span>
+                <span class="ord-num" id="ordNum">#SB-0001</span>
+              </div>
+              <div class="cust-row">
+                <input
+                  class="cust-field"
+                  id="custName"
+                  placeholder="Tên khách hàng (viết lên ly)…"
+                />
+                <button class="btn-scan-member" onclick="openMemberModal()">
+                  🎫 Thành viên
+                </button>
+              </div>
+              <div class="member-tag" id="memberTag" style="display: none">
+                <span
+                  >⭐ <span id="memberTagName"></span> ·
+                  <span id="memberTagLevel"></span
+                ></span>
+                <small
+                  >★ <span id="memberTagStars"></span> Stars ·
+                  <button
+                    onclick="clearMember()"
+                    style="
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                      color: var(--sb-gold);
+                      font-weight: 700;
+                      font-size: 11px;
+                    "
+                  >
+                    ✕
+                  </button></small
+                >
+              </div>
+              <div class="promo-banner" id="promoBanner">
+                <span id="promoText">🎉 Áp dụng khuyến mãi "Mua 1 tặng 1"</span>
+                <button class="promo-close" onclick="clearPromo()">✕</button>
+              </div>
+            </div>
+
+            <div class="ord-list" id="ordList">
+              <div class="empty-state">
+                <span class="ei">☕</span>
+                <p>Chọn sản phẩm từ menu bên trái</p>
+              </div>
+            </div>
+
+            <div class="ord-sum" id="ordSum">
+              <div class="sum-row">
+                <span>Tạm tính</span><span id="subT"></span>
+              </div>
+              <div
+                class="sum-row discount"
+                id="discountRow"
+                style="display: none"
+              >
+                <span id="discountLabel">Giảm giá</span
+                ><span id="discountAmt"></span>
+              </div>
+              <div class="sum-row">
+                <span>VAT (10%)</span><span id="vatT"></span>
+              </div>
+              <div class="sum-row total">
+                <span>TỔNG CỘNG</span><span id="grandT"></span>
+              </div>
+            </div>
+
+            <div class="pay-zone">
+              <div class="pay-label">Phương thức thanh toán</div>
+              <div class="pay-methods">
+                <div class="pay-btn on" onclick="selPay(this, 'Tiền mặt')">
+                  <em>💵</em><span>Tiền mặt</span>
+                </div>
+                <div class="pay-btn" onclick="selPay(this, 'Thẻ NH')">
+                  <em>💳</em><span>Thẻ NH</span>
+                </div>
+                <div class="pay-btn" onclick="selPay(this, 'MoMo')">
+                  <em>🟣</em><span>MoMo</span>
+                </div>
+                <div class="pay-btn" onclick="selPay(this, 'ZaloPay')">
+                  <em>🔵</em><span>ZaloPay</span>
+                </div>
+                <div class="pay-btn" onclick="selPay(this, 'Stars')">
+                  <em>⭐</em><span>Stars</span>
+                </div>
+              </div>
+              <button
+                class="btn-charge"
+                id="chargeBtn"
+                onclick="doCharge()"
+                disabled
+              >
+                Thanh toán
+              </button>
+              <button class="btn-void" id="voidBtn" onclick="doVoid()" disabled>
+                Hủy đơn
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KDS VIEW -->
+      <div class="view" id="kdsView">
+        <div class="kds-header">
+          <div class="kds-title">
+            📺 Kitchen Display System — Hàng chờ pha chế
+          </div>
+          <div class="kds-stats">
+            <div class="kds-stat">
+              <b id="kdsPending">0</b><small>Chờ</small>
+            </div>
+            <div class="kds-stat">
+              <b id="kdsMaking">0</b><small>Đang làm</small>
+            </div>
+            <div class="kds-stat">
+              <b id="kdsDone">0</b><small>Hoàn thành</small>
+            </div>
+          </div>
+        </div>
+        <div class="kds-board" id="kdsBoard">
+          <div class="kds-empty">☕ Chưa có đơn nào — Đang chờ…</div>
+        </div>
+      </div>
+
+      <!-- INVENTORY VIEW -->
+      <div class="view" id="inventoryView">
+        <div class="inv-header">
+          <div class="inv-title">📦 Quản lý tồn kho nguyên liệu</div>
+          <div style="font-size: 12px; color: var(--tx-sub)">
+            Cập nhật tự động sau mỗi giao dịch
+          </div>
+        </div>
+        <div class="inv-body">
+          <div class="inv-grid" id="invGrid"></div>
+        </div>
+      </div>
+
+      <!-- REPORTS VIEW -->
+      <div class="view" id="reportsView">
+        <div class="rep-header">
+          <div class="rep-title">📊 Báo cáo & Phân tích ca làm việc</div>
+          <div style="font-size: 12px; color: var(--tx-sub)" id="repShiftLabel">
+            Ca sáng · Học viện Ngân hàng
+          </div>
+        </div>
+        <div class="rep-body" id="repBody"></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMIZE MODAL -->
+    <div class="modal-overlay" id="szOverlay">
+      <div class="modal-box">
+        <div class="mhd">
+          <div id="mhImgWrap"></div>
+          <div class="mhd-txt">
+            <h3 id="mhName"></h3>
+            <p id="mhCat"></p>
+          </div>
+        </div>
+        <div class="mbd" id="modalBody"></div>
+        <div class="mft">
+          <button class="btn-mcancel" onclick="closeModal()">Hủy</button>
+          <button class="btn-mok" onclick="confirmModal()">Thêm vào đơn</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECEIPT MODAL -->
+    <div class="receipt-overlay" id="recOverlay">
+      <div class="receipt-box">
+        <div class="rec-hd">
+          <div class="check">✅</div>
+          <h3>Thanh toán thành công!</h3>
+          <p id="rNum"></p>
+        </div>
+        <div class="rec-body">
+          <div class="rec-meta">
+            <div class="rec-meta-item">
+              <span class="lbl">Ngày giờ</span
+              ><span class="val" id="rTime"></span>
+            </div>
+            <div class="rec-meta-item">
+              <span class="lbl">Thu ngân</span
+              ><span class="val" id="rCashier">Việt Hoàng</span>
+            </div>
+            <div class="rec-meta-item">
+              <span class="lbl">Khách hàng</span
+              ><span class="val" id="rCust"></span>
+            </div>
+            <div class="rec-meta-item">
+              <span class="lbl">Thanh toán</span
+              ><span class="val" id="rPay"></span>
+            </div>
+          </div>
+          <hr class="rec-div" />
+          <div id="rItems"></div>
+          <hr class="rec-div" />
+          <div class="rec-sum-row">
+            <span>Tạm tính</span><span id="rSub"></span>
+          </div>
+          <div
+            class="rec-sum-row"
+            id="rDiscRow"
+            style="display: none; color: var(--sb-green)"
+          >
+            <span id="rDiscLabel">Giảm giá</span><span id="rDisc"></span>
+          </div>
+          <div class="rec-sum-row">
+            <span>VAT (10%)</span><span id="rVat"></span>
+          </div>
+          <div class="rec-total-row">
+            <span>TỔNG CỘNG</span><span id="rTotal"></span>
+          </div>
+          <div class="rec-stars" id="recStars" style="display: none">
+            ⭐ Cộng <b id="recStarsAmt"></b> Stars cho
+            <b id="recStarsMember"></b> · Tổng: <b id="recStarsTotal"></b> Stars
+          </div>
+          <div class="rec-thanks">
+            ☕ Cảm ơn! Hẹn gặp lại bạn tại Starbucks!
+          </div>
+        </div>
+        <div class="rec-ft">
+          <button class="btn-rft sec" onclick="window.print()">
+            🖨 In hóa đơn
+          </button>
+          <button class="btn-rft pri" onclick="newOrder()">Đơn mới →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMBER LOOKUP MODAL -->
+    <div class="member-overlay" id="memberOverlay">
+      <div class="member-box">
+        <div class="member-hd">
+          <h3>🎫 Tìm kiếm thành viên</h3>
+          <p>Quét thẻ, scan QR hoặc nhập tên khách hàng</p>
+        </div>
+        <div class="member-search">
+          <input
+            id="memberSearch"
+            placeholder="Nhập tên hoặc mã thành viên…"
+            oninput="filterMembers()"
+          />
+        </div>
+        <div class="member-list" id="memberList"></div>
+        <div class="member-ft">
+          <button class="m-cancel" onclick="closeMemberModal()">Đóng</button>
+          <button class="m-select" onclick="confirmMember()">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- BANK LINK MODAL -->
+    <div class="bank-link-overlay" id="bankLinkOverlay">
+      <div class="bank-link-box">
+        <div class="bank-link-hd">
+          <h3>🏦 Liên kết tài khoản ngân hàng</h3>
+          <p>Tài khoản thu ngân chưa liên kết ngân hàng. Vui lòng liên kết để nhận thanh toán chuyển khoản.</p>
+        </div>
+        <div class="bank-link-body">
+          <div class="bank-field-label">Chọn ngân hàng</div>
+          <select class="bank-select" id="bankSelect">
+            <option value="">-- Chọn ngân hàng --</option>
+            <option value="MBBank">MBBank</option>
+            <option value="Vietcombank">Vietcombank</option>
+            <option value="VietinBank">VietinBank</option>
+            <option value="Agribank">Agribank</option>
+            <option value="BIDV">BIDV</option>
+            <option value="Techcombank">Techcombank</option>
+            <option value="VPBank">VPBank</option>
+            <option value="TPBank">TPBank</option>
+          </select>
+          <div class="bank-field-label">Số tài khoản</div>
+          <input class="bank-input" id="bankAccNum" type="text" placeholder="Nhập số tài khoản…" maxlength="20" />
+          <div class="bank-field-label">Tên chủ tài khoản</div>
+          <input class="bank-input" id="bankAccName" type="text" placeholder="Nhập tên chủ tài khoản…" />
+        </div>
+        <div class="bank-link-ft">
+          <button class="btn-bank-cancel" onclick="closeBankLink()">Hủy</button>
+          <button class="btn-bank-confirm" onclick="confirmBankLink()">✅ Xác nhận liên kết</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT STEP MODAL -->
+    <div class="pay-modal-overlay" id="payStepOverlay">
+      <div class="pay-modal-box">
+        <div class="pay-modal-hd">
+          <h3>💳 Thanh toán đơn hàng</h3>
+          <p id="payModalSubtitle">Chọn phương thức thanh toán</p>
+        </div>
+        <div class="pay-step-indicator">
+          <div class="pay-step-tab active" id="payTab1">1. Phương thức</div>
+          <div class="pay-step-tab" id="payTab2">2. Xác nhận tiền</div>
+          <div class="pay-step-tab" id="payTab3">3. Hoàn tất</div>
+        </div>
+        <div class="pay-step-content">
+          <!-- Step 1: Choose method -->
+          <div class="pay-step-panel active" id="payPanel1">
+            <div class="pay-amount-box">
+              <div class="pa-label">Tổng tiền cần thanh toán</div>
+              <div class="pa-value" id="payTotalDisplay"></div>
+            </div>
+            <div class="pay-method-grid">
+              <div class="pay-method-card sel" id="pmCash" onclick="selectPayModalMethod('cash')">
+                <div class="pmc-ico">💵</div>
+                <div class="pmc-lbl">Tiền mặt</div>
+              </div>
+              <div class="pay-method-card" id="pmQR" onclick="selectPayModalMethod('qr')">
+                <div class="pmc-ico">📱</div>
+                <div class="pmc-lbl">Chuyển khoản QR</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Cash or QR details -->
+          <div class="pay-step-panel" id="payPanel2">
+            <!-- Cash content -->
+            <div id="cashPanel">
+              <div class="pay-amount-box">
+                <div class="pa-label">Khách cần trả</div>
+                <div class="pa-value" id="payTotalCash"></div>
+              </div>
+              <div class="cash-input-group">
+                <div class="cash-input-label">Số tiền khách đưa (đồng)</div>
+                <input class="cash-input-field" id="cashGiven" type="number" placeholder="0" oninput="calcChange()" />
+              </div>
+              <div class="cash-change-box" id="changeBox">
+                <span class="ccb-label">Tiền thối lại</span>
+                <span class="ccb-value" id="changeAmt">—</span>
+              </div>
+            </div>
+            <!-- QR content -->
+            <div id="qrPanel" style="display:none;">
+              <div class="pay-amount-box">
+                <div class="pa-label">Số tiền cần chuyển</div>
+                <div class="pa-value" id="payTotalQR"></div>
+              </div>
+              <div class="qr-wrap">
+                <div class="qr-img" id="qrCodeDisplay">
+                  <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="150" height="150" fill="white"/>
+                    <!-- Simulated QR Code pattern -->
+                    <rect x="10" y="10" width="50" height="50" fill="none" stroke="#1e3932" stroke-width="4"/>
+                    <rect x="18" y="18" width="34" height="34" fill="#1e3932"/>
+                    <rect x="90" y="10" width="50" height="50" fill="none" stroke="#1e3932" stroke-width="4"/>
+                    <rect x="98" y="18" width="34" height="34" fill="#1e3932"/>
+                    <rect x="10" y="90" width="50" height="50" fill="none" stroke="#1e3932" stroke-width="4"/>
+                    <rect x="18" y="98" width="34" height="34" fill="#1e3932"/>
+                    <rect x="72" y="72" width="8" height="8" fill="#1e3932"/>
+                    <rect x="84" y="72" width="8" height="8" fill="#1e3932"/>
+                    <rect x="96" y="72" width="8" height="8" fill="#1e3932"/>
+                    <rect x="108" y="72" width="8" height="8" fill="#1e3932"/>
+                    <rect x="120" y="72" width="8" height="8" fill="#1e3932"/>
+                    <rect x="72" y="84" width="8" height="8" fill="#1e3932"/>
+                    <rect x="96" y="84" width="8" height="8" fill="#1e3932"/>
+                    <rect x="120" y="84" width="8" height="8" fill="#1e3932"/>
+                    <rect x="72" y="96" width="8" height="8" fill="#1e3932"/>
+                    <rect x="84" y="96" width="8" height="8" fill="#1e3932"/>
+                    <rect x="108" y="96" width="8" height="8" fill="#1e3932"/>
+                    <rect x="72" y="108" width="8" height="8" fill="#1e3932"/>
+                    <rect x="96" y="108" width="8" height="8" fill="#1e3932"/>
+                    <rect x="120" y="108" width="8" height="8" fill="#1e3932"/>
+                    <rect x="72" y="120" width="8" height="8" fill="#1e3932"/>
+                    <rect x="84" y="120" width="8" height="8" fill="#1e3932"/>
+                    <rect x="96" y="120" width="8" height="8" fill="#1e3932"/>
+                    <rect x="108" y="120" width="8" height="8" fill="#1e3932"/>
+                  </svg>
+                </div>
+                <div class="qr-note">Quét mã QR bằng ứng dụng ngân hàng<br/>Chuyển đúng số tiền hiển thị phía trên</div>
+              </div>
+              <div style="background:var(--sb-mint2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--tx-sub);margin-top:4px;">
+                🏦 Tài khoản: <strong id="qrBankName"></strong> · <strong id="qrAccNum"></strong><br/>
+                Chủ TK: <strong id="qrAccOwner"></strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Confirm -->
+          <div class="pay-step-panel" id="payPanel3">
+            <div style="text-align:center;padding:10px 0 16px;">
+              <div style="font-size:48px;margin-bottom:10px;">✅</div>
+              <div style="font-family:'Lora',serif;font-size:18px;color:var(--sb-forest);font-weight:600;margin-bottom:6px;">Xác nhận dòng tiền</div>
+              <div style="font-size:12.5px;color:var(--tx-sub);">Kiểm tra thông tin bên dưới trước khi hoàn tất</div>
+            </div>
+            <div style="background:var(--sb-mint2);border-radius:12px;padding:14px 16px;margin-bottom:14px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;">
+                <span style="color:var(--tx-sub)">Phương thức:</span>
+                <strong id="confirmMethod"></strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;">
+                <span style="color:var(--tx-sub)">Tổng tiền:</span>
+                <strong id="confirmTotal" style="color:var(--sb-green)"></strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;" id="confirmChangeRow">
+                <span style="color:var(--tx-sub)">Tiền thối:</span>
+                <strong id="confirmChange"></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pay-actions">
+          <button class="btn-pay-cancel" id="payBtnBack" onclick="payGoBack()">← Quay lại</button>
+          <button class="btn-pay-next" id="payBtnNext" onclick="payGoNext()">Tiếp tục →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="pos.js"></script>
+  </body>
+</html>
